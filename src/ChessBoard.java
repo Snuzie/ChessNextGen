@@ -17,7 +17,8 @@ public class ChessBoard {
 
 	public ChessBoard() {
 		makeBoard();
-		squares[1][1].setPiece(new Queen(1, 1, true));
+		//squares[1][1].setPiece(new Queen(1, 1, true));
+		newGame();
 	}
 
 	private void makeBoard() {
@@ -117,6 +118,30 @@ public class ChessBoard {
 		}
 		markedSquare.unmark();
 		markedSquare = null;
+	}
+	
+	public void newGame(){
+		for (int i = 0; i < 8; i++){
+			squares[i][1].setPiece(new Pawn(i, 1, false));
+			squares[i][6].setPiece(new Pawn(i, 6, true));
+		}
+		squares[0][0].setPiece(new Rook(0, 0, false));
+		squares[1][0].setPiece(new Knight(1, 0, false));
+		squares[2][0].setPiece(new Bishop(2, 0, false));
+		squares[3][0].setPiece(new King(3, 0, false));
+		squares[4][0].setPiece(new Queen(4, 0, false));
+		squares[5][0].setPiece(new Bishop(5, 0, false));
+		squares[6][0].setPiece(new Knight(6, 0, false));
+		squares[7][0].setPiece(new Rook(7, 0, false));
+
+		squares[0][7].setPiece(new Rook(0, 7, true));
+		squares[1][7].setPiece(new Knight(1, 7, true));
+		squares[2][7].setPiece(new Bishop(2, 7, true));
+		squares[3][7].setPiece(new King(3, 7, true));
+		squares[4][7].setPiece(new Queen(4, 7, true));
+		squares[5][7].setPiece(new Bishop(5, 7, true));
+		squares[6][7].setPiece(new Knight(6, 7, true));
+		squares[7][7].setPiece(new Rook(7, 7, true));
 	}
 
 }

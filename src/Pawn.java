@@ -30,6 +30,7 @@ public class Pawn extends Piece {
 
 	@Override
 	protected boolean checkMove(Square square) {
+		if (square == null) return false;
 		if (square.isBlocked()) {
 			return false;
 		}
@@ -38,6 +39,7 @@ public class Pawn extends Piece {
 	}
 
 	private boolean checkAttackMove(Square square) {
+		if (square == null) return false;
 		if (square.isBlocked()) {
 			if (isWhite != square.getPiece().isWhite) {
 				moves.add(square);
