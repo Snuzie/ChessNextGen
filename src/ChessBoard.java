@@ -46,7 +46,6 @@ public class ChessBoard {
 				squares[row][col] = enruta;
 			}
 		}
-
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -63,27 +62,61 @@ public class ChessBoard {
 		if (row > 7 || col > 7 || row < 0 || col < 0) {
 			return null; // Index out of bounds
 		}
-		
 		return squares[row][col];
 	}
 
+	/**
+	 * Create a eventListener.
+	 * Used by all square objects on the board
+	 */
 	private ActionListener makeActionListener() {
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				Square square = (Square) evt.getSource();
-				Piece selectedPiece = null;
 				
-				if(square.isBlocked()) {
-					selectedPiece = square.getPiece();
-					HashSet<Square> possibilities = selectedPiece.calcMoves(ChessBoard.this);
-					for (Square s:possibilities) {
-						s.setBackground(Color.BLUE);
+				Square clickedSquare = (Square) evt.getSource();
+				
+				if(markedSquare == null) {
+					// There's no marked square on the board
+					if(clickedSquare.isBlocked()) {
+						markSquare(clickedSquare);
+					}	
+				} else if(markedSquare != clickedSquare){ 
+					// There's already a marked square on the board
+					Piece piece = markedSquare.getPiece();
+					HashSet<Square> moves = piece.calcMoves(ChessBoard.this);
+					if(moves.contains(clickedSquare)) {
+						// The move's OK
+						markedSquare.removePiece();
+						unmarkSquare();
+						clickedSquare.setPiece(piece);
+					} else {
+						// The move's not OK 
+						unmarkSquare();
 					}
+				} else {
+					// The same square's been clicked twice
+					unmarkSquare();
 				}
-				square.setBackground(Color.RED);
+				
 			}
 		};
 		return al;
+	}
+	
+	private void markSquare(Square square) {
+		square.mark();
+		markedSquare = square;
+	}
+	
+	/**
+	 * Unmark a square
+	 */
+	private void unmarkSquare() {
+		if(markedSquare == null) {
+			return;
+		}
+		markedSquare.unmark();
+		markedSquare = null;
 	}
 
 }

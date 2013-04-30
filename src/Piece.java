@@ -11,6 +11,7 @@ public abstract class Piece {
 		this.x = x;
 		this.y = y;
 		this.isWhite = isWhite;
+		moves = new HashSet<Square>();
 	}
 	
 	public void setIcon(ImageIcon icon) {

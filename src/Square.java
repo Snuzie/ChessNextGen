@@ -59,6 +59,20 @@ public class Square extends JButton {
 	public void changeColor(Color color) {
 		super.setBackground(color);
 	}
+	
+	/**
+	 * Mark the square
+	 */
+	public void mark() {
+		setBorderColor(Color.CYAN);
+	}
+	
+	/**
+	 * Unmark the square
+	 */
+	public void unmark() {
+		setBorderColor(Color.BLACK);
+	}
 
 	/**
 	 * Change the color of the square's border

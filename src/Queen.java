@@ -30,7 +30,7 @@ public class Queen extends Piece {
 
 	@Override
 	public HashSet<Square> calcMoves(ChessBoard board) {
-		moves = new HashSet<Square>();
+		moves.clear();
 		for(int i = 1; checkMove(board.getSquare(x+i, y)); i++) {}
 		for(int i = 1; checkMove(board.getSquare(x-i, y)); i++) {}
 		for(int i = 1; checkMove(board.getSquare(x, y+i)); i++) {}
