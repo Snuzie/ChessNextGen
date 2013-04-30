@@ -1,10 +1,16 @@
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashSet;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public abstract class Piece {
 	protected int x, y;
 	protected boolean isWhite;
 	protected HashSet<Square> moves;
+	protected BufferedImage img;
 	protected ImageIcon icon;
 
 	public Piece(int x, int y, boolean isWhite){
@@ -44,5 +50,16 @@ public abstract class Piece {
 		}
 		moves.add(square);
 		return true;
+	}
+	
+	protected void setImage(String url){
+		try {
+			img = ImageIO.read(getClass().getResource(url));
+			Image scaledImg = img.getScaledInstance(30, 30, java.awt.Image.SCALE_SMOOTH );
+			setIcon(new ImageIcon(scaledImg));
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 }

@@ -5,6 +5,11 @@ public class King extends Piece{
 	public King(int x, int y, boolean isWhite) {
 		super(x, y, isWhite);
 		
+		if(isWhite){
+			setImage("Icons/WKi.png");
+		} else {
+			setImage("Icons/BKi.png");
+		}
 	}
 
 	@Override
@@ -14,7 +19,7 @@ public class King extends Piece{
 
 	@Override
 	public HashSet<Square> calcMoves(ChessBoard board) {
-		moves = new HashSet<Square>();
+		moves.clear();
 		checkMove(board.getSquare(x+1,y));
 		checkMove(board.getSquare(x-1,y));
 		checkMove(board.getSquare(x,y+1));

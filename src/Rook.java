@@ -4,6 +4,12 @@ import java.util.HashSet;
 public class Rook extends Piece {
 	public Rook(int x, int y, boolean isWhite) {
 		super(x, y, isWhite);
+		
+		if(isWhite) {
+			setImage("Icons/WR.png");
+		} else {
+			setImage("Icons/BR.png");
+		}
 	}
 
 	@Override
@@ -13,7 +19,7 @@ public class Rook extends Piece {
 
 	@Override
 	public HashSet<Square> calcMoves(ChessBoard board) {
-		moves = new HashSet<Square>();
+		moves.clear();
 		for(int i = 1; checkMove(board.getSquare(x+i, y)); i++) {}
 		for(int i = 1; checkMove(board.getSquare(x-i, y)); i++) {}
 		for(int i = 1; checkMove(board.getSquare(x, y+i)); i++) {}

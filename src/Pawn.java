@@ -6,8 +6,10 @@ public class Pawn extends Piece {
 	public Pawn(int x, int y, boolean isWhite) {
 		super(x, y, isWhite);
 		if (isWhite) {
+			setImage("Icons/WP.png");
 			movement = -1;
 		} else {
+			setImage("Icons/BP.png");
 			movement = 1;
 		}
 	}
