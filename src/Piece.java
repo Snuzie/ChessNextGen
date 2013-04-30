@@ -28,6 +28,16 @@ public abstract class Piece {
 	}
 	
 	/**
+	 * Set the location of this piece
+	 * @param row
+	 * @param col
+	 */
+	public void setLocation(int row, int col) {
+		this.y = col;
+		this.x = row;
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */

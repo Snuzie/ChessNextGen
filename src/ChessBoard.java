@@ -17,7 +17,7 @@ public class ChessBoard {
 
 	public ChessBoard() {
 		makeBoard();
-		squares[3][3].setPiece(new Queen(3, 3, true));
+		squares[1][1].setPiece(new Queen(1, 1, true));
 	}
 
 	private void makeBoard() {

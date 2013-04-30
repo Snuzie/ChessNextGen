@@ -36,6 +36,9 @@ public class Square extends JButton {
 	public void setPiece(Piece p) {
 		setIcon(p.getIcon());
 		piece = p;
+		int row = location.getRow();
+		int col = location.getColumn();
+		piece.setLocation(row, col);
 		super.setIcon(p.getIcon());
 	}
 
