@@ -178,7 +178,7 @@ public class ChessBoard {
 				
 				Object[] options={"New Game", "Quit"};
 				
-				int n = JOptionPane.showOptionDialog(frame,
+				int n = JOptionPane.showOptionDialog(new JFrame(),
 				    "Would you like to start a new game?",
 				    "New game?",
 				    JOptionPane.YES_NO_OPTION,
@@ -196,6 +196,11 @@ public class ChessBoard {
 			}
 		}
 		to.setPiece(from.removePiece());
+		if (Pawn.class.isInstance(to.getPiece())){
+			Pawn pawn = (Pawn)to.getPiece();
+			if (pawn.isPromoteable())
+				pawn.promote(this);
+		}
 		unmarkSquare();
 		lastMoveWhite = !lastMoveWhite;
 	}
