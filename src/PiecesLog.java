@@ -1,4 +1,6 @@
 
+import java.awt.Dimension;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,7 +14,7 @@ public class PiecesLog extends JPanel {
 
 	public PiecesLog() {
 		super.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		super.setSize(60, 500);
+		super.setPreferredSize(new Dimension(40, 100));
 	}
 
 	/**
@@ -26,5 +28,13 @@ public class PiecesLog extends JPanel {
 		
 		JLabel picIcon = new JLabel(piece.getIcon());
 		super.add(picIcon);
+	}
+	
+	/**
+	 * Clear the log
+	 */
+	public void clear() {
+		this.removeAll();
+		this.updateUI();
 	}
 }

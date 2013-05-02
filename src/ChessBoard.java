@@ -41,7 +41,7 @@ public class ChessBoard {
 	}
 
 	private void makeBoard() {
-		frame = new JFrame("ChessWindow");
+		frame = new JFrame("Chess Leet!");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Program exits when window closes
 
@@ -52,12 +52,13 @@ public class ChessBoard {
 		squares = new Square[8][8];
 		takenPieces = new ArrayList<Piece>();
 
-		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
-		GridLayout layout = new GridLayout(1, 2, 10, 10);
-
 		Container contentPane = frame.getContentPane();
-		JPanel chessBoard = new JPanel(boardLayout);
+		
+		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
+		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
+		
 		contentPane.setLayout(layout);
+		JPanel chessBoard = new JPanel(boardLayout);
 
 		squares = new Square[8][8];
 
@@ -205,7 +206,7 @@ public class ChessBoard {
 	private void newGame() {
 		clearBoard();
 		log.clearLog();
-	
+		piecesLog.clear();
 		lastMoveWhite = false;
 		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, true));

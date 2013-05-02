@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.*;
 
 public class Log extends JPanel {
@@ -10,7 +12,7 @@ public class Log extends JPanel {
 	
 	public Log() {
 		super(new BorderLayout());
-		
+		super.setPreferredSize(new Dimension(200, 200));
         listModel = new DefaultListModel();
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
