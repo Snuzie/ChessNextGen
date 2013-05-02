@@ -15,10 +15,11 @@ public class ChessBoard {
 	private Square[][] squares; // En matris med alla rutor på brädet
 	private Square markedSquare;
 	private boolean lastMoveWhite = false;
+	private Log log;
 
 	public ChessBoard() {
 		makeBoard();
-		newGame();
+		//newGame();
 	}
 
 	public Square getMarkedSquare() {
@@ -39,11 +40,14 @@ public class ChessBoard {
 	private void makeBoard() {
 		frame = new JFrame("ChessWindow");
 		makeMenuBar(frame);
+		log = new Log();
 		squares = new Square[8][8];
 
-		GridLayout layout = new GridLayout(8, 8, 0, 0);
+		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
+		GridLayout layout = new GridLayout(1, 2, 10, 10);
 
 		Container contentPane = frame.getContentPane();
+		JPanel chessBoard = new JPanel(boardLayout);
 		contentPane.setLayout(layout);
 
 		for (int row = 0; row < 8; row++) {
@@ -59,10 +63,12 @@ public class ChessBoard {
 				} else {
 					enruta = new Square(text, Color.WHITE, location, al);
 				}
-				contentPane.add(enruta);
+				chessBoard.add(enruta);
 				squares[row][col] = enruta;
 			}
 		}
+		contentPane.add(chessBoard);
+		contentPane.add(log);
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -119,9 +125,11 @@ public class ChessBoard {
 					HashSet<Square> moves = piece.calcMoves(ChessBoard.this);
 					if (moves.contains(clickedSquare)) {
 						// The move's OK
+						log.addMove(markedSquare, clickedSquare);
 						markedSquare.removePiece();
 						unmarkSquare();
 						clickedSquare.setPiece(piece);
+						
 						lastMoveWhite = !lastMoveWhite;
 					} else {
 						// The move's not OK
