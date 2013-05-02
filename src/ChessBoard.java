@@ -14,10 +14,26 @@ public class ChessBoard {
 	private JFrame frame;
 	private Square[][] squares; // En matris med alla rutor pŒ brŠdet
 	private Square markedSquare;
+	private boolean lastMoveWhite = false;
 
 	public ChessBoard() {
 		makeBoard();
 		newGame();
+	}
+
+	public Square getMarkedSquare() {
+		return markedSquare;
+	}
+
+	public Square[][] getSquares() {
+		return squares;
+	}
+
+	public Square getSquare(int row, int col) {
+		if (row > 7 || col > 7 || row < 0 || col < 0) {
+			return null; // Index out of bounds
+		}
+		return squares[row][col];
 	}
 
 	private void makeBoard() {
@@ -80,21 +96,6 @@ public class ChessBoard {
 		fileMenu.add(openItem);
 	}
 
-	public Square getMarkedSquare() {
-		return markedSquare;
-	}
-
-	public Square[][] getSquares() {
-		return squares;
-	}
-
-	public Square getSquare(int row, int col) {
-		if (row > 7 || col > 7 || row < 0 || col < 0) {
-			return null; // Index out of bounds
-		}
-		return squares[row][col];
-	}
-
 	/**
 	 * Create a eventListener. Used by all square objects on the board
 	 */
@@ -107,7 +108,10 @@ public class ChessBoard {
 				if (markedSquare == null) {
 					// There's no marked square on the board
 					if (clickedSquare.isBlocked()) {
-						markSquare(clickedSquare);
+						Piece p = clickedSquare.getPiece();
+						if (p.isWhite != lastMoveWhite) {
+							markSquare(clickedSquare);
+						}
 					}
 				} else if (markedSquare != clickedSquare) {
 					// There's already a marked square on the board
@@ -118,6 +122,7 @@ public class ChessBoard {
 						markedSquare.removePiece();
 						unmarkSquare();
 						clickedSquare.setPiece(piece);
+						lastMoveWhite = !lastMoveWhite;
 					} else {
 						// The move's not OK
 						unmarkSquare();
@@ -130,22 +135,6 @@ public class ChessBoard {
 			}
 		};
 		return al;
-	}
-
-	private void markSquare(Square square) {
-		square.mark();
-		markedSquare = square;
-	}
-
-	/**
-	 * Unmark a square
-	 */
-	private void unmarkSquare() {
-		if (markedSquare == null) {
-			return;
-		}
-		markedSquare.unmark();
-		markedSquare = null;
 	}
 
 	/**
@@ -175,18 +164,44 @@ public class ChessBoard {
 		squares[6][7].setPiece(new Knight(6, 7, true));
 		squares[7][7].setPiece(new Rook(7, 7, true));
 	}
-	
+
 	/**
 	 * Clear the board of all pieces.
 	 */
 	private void clearBoard() {
-		for (Square[] row: squares) {
-			for (Square s: row) {
+		for (Square[] row : squares) {
+			for (Square s : row) {
 				if (s.isBlocked()) {
 					s.removePiece();
 				}
 			}
 		}
+	}
+
+	private void markSquare(Square square) {
+		square.mark();
+		markedSquare = square;
+	}
+
+	/**
+	 * Unmark the marked square if there's one.
+	 */
+	private void unmarkSquare() {
+		if (markedSquare == null) {
+			return;
+		}
+		markedSquare.unmark();
+		markedSquare = null;
+	}
+
+	/**
+	 * Unmark a given square.
+	 */
+	private void unmarkSquare(Square s) throws NullPointerException {
+		if (s == null) {
+			throw new NullPointerException();
+		}
+		s.unmark();
 	}
 
 }

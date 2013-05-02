@@ -66,7 +66,7 @@ public class Square extends JButton {
 	 * Mark the square
 	 */
 	public void mark() {
-		setBorderColor(Color.CYAN);
+		setBorderColor(Color.RED);
 	}
 	
 	/**
