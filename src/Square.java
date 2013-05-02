@@ -26,10 +26,11 @@ public class Square extends JButton {
 		super.addActionListener(al);
 	}
 	
-	public void removePiece() {
+	public Piece removePiece() {
+		Piece p = piece;
 		setIcon(null);
 		piece = null;
-		setBorderColor(Color.BLACK);
+		return p;
 	}
 
 	public void setPiece(Piece p) {
