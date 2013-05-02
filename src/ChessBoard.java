@@ -205,6 +205,7 @@ public class ChessBoard {
 	private void newGame() {
 		clearBoard();
 		log.clearLog();
+	
 		lastMoveWhite = false;
 		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, true));
