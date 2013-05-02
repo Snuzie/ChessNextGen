@@ -164,7 +164,8 @@ public class ChessBoard {
 	 * @param to
 	 */
 	private void move(Square from, Square to) {
-		
+
+		log.addMove(from, to);
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
 			takenPieces.add(taken);
@@ -175,7 +176,6 @@ public class ChessBoard {
 		to.setPiece(from.removePiece());
 		unmarkSquare();
 		lastMoveWhite = !lastMoveWhite;
-		log.addMove(from, to);
 	}
 
 	/**
@@ -183,6 +183,7 @@ public class ChessBoard {
 	 */
 	private void newGame() {
 		clearBoard();
+		log.clearLog();
 		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, true));
 			squares[i][6].setPiece(new Pawn(i, 6, false));

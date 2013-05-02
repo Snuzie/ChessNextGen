@@ -2,8 +2,8 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 
 public class Log extends JPanel {
-	private JList list;
-	private DefaultListModel listModel;
+	private JList<String> list;
+	private DefaultListModel<String> listModel;
 	private int moveCount = 1;
 	private static String letters[] = new String[]
 			{"A","B","C","D","E","F","G","H"};
@@ -11,8 +11,8 @@ public class Log extends JPanel {
 	public Log() {
 		super(new BorderLayout());
 		
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
+        listModel = new DefaultListModel<String>();
+        list = new JList<String>(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
         list.setVisibleRowCount(5);
@@ -32,5 +32,9 @@ public class Log extends JPanel {
 	
 	public void gameOver() {
 		listModel.addElement("Game Over!");
+	}
+	
+	public void clearLog(){
+		listModel.clear();
 	}
 }
