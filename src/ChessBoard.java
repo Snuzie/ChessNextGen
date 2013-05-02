@@ -171,6 +171,24 @@ public class ChessBoard {
 			takenPieces.add(taken);
 			if (King.class.isInstance(taken)) {
 				log.gameOver();
+				
+				Object[] options={"New Game", "Quit"};
+				
+				int n = JOptionPane.showOptionDialog(frame,
+				    "Would you like to start a new game?",
+				    "New game?",
+				    JOptionPane.YES_NO_OPTION,
+				    JOptionPane.QUESTION_MESSAGE,
+				    null,     //do not use a custom Icon
+				    options,  //the titles of buttons
+				    options[0]); //default button title
+				if (n == 0) {
+					newGame();
+					unmarkSquare();
+					return;
+				} else {
+					System.exit(0);
+				}
 			}
 		}
 		to.setPiece(from.removePiece());
@@ -184,6 +202,7 @@ public class ChessBoard {
 	private void newGame() {
 		clearBoard();
 		log.clearLog();
+		lastMoveWhite = false;
 		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, true));
 			squares[i][6].setPiece(new Pawn(i, 6, false));
