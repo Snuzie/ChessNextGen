@@ -17,12 +17,12 @@ public class ChessBoard {
 
 	public ChessBoard() {
 		makeBoard();
-		//squares[1][1].setPiece(new Queen(1, 1, true));
 		newGame();
 	}
 
 	private void makeBoard() {
 		frame = new JFrame("ChessWindow");
+		makeMenuBar(frame);
 		squares = new Square[8][8];
 
 		GridLayout layout = new GridLayout(8, 8, 0, 0);
@@ -32,9 +32,9 @@ public class ChessBoard {
 
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
-				
+
 				ActionListener al = makeActionListener();
-				
+
 				Square enruta = null;
 				String text = row + ":" + col;
 				Location location = new Location(row, col);
@@ -49,6 +49,35 @@ public class ChessBoard {
 		}
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	/**
+	 * Create a menu bar and attach it to a frame.
+	 * 
+	 * @param frame
+	 *            The frame the menu bar will be added to.
+	 */
+	private void makeMenuBar(JFrame frame) {
+
+		// Add a menu bar
+		JMenuBar menubar = new JMenuBar();
+		frame.setJMenuBar(menubar);
+
+		// Add menus to the menu bar
+		JMenu fileMenu = new JMenu("File");
+		menubar.add(fileMenu);
+
+		JMenu helpMenu = new JMenu("Help");
+		menubar.add(helpMenu);
+
+		// Add menu items to the menus
+		JMenuItem openItem = new JMenuItem("New Game");
+		openItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				newGame();
+			}
+		});
+		fileMenu.add(openItem);
 	}
 
 	public Square getMarkedSquare() {
@@ -67,61 +96,64 @@ public class ChessBoard {
 	}
 
 	/**
-	 * Create a eventListener.
-	 * Used by all square objects on the board
+	 * Create a eventListener. Used by all square objects on the board
 	 */
 	private ActionListener makeActionListener() {
 		ActionListener al = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				
+
 				Square clickedSquare = (Square) evt.getSource();
-				
-				if(markedSquare == null) {
+
+				if (markedSquare == null) {
 					// There's no marked square on the board
-					if(clickedSquare.isBlocked()) {
+					if (clickedSquare.isBlocked()) {
 						markSquare(clickedSquare);
-					}	
-				} else if(markedSquare != clickedSquare){ 
+					}
+				} else if (markedSquare != clickedSquare) {
 					// There's already a marked square on the board
 					Piece piece = markedSquare.getPiece();
 					HashSet<Square> moves = piece.calcMoves(ChessBoard.this);
-					if(moves.contains(clickedSquare)) {
+					if (moves.contains(clickedSquare)) {
 						// The move's OK
 						markedSquare.removePiece();
 						unmarkSquare();
 						clickedSquare.setPiece(piece);
 					} else {
-						// The move's not OK 
+						// The move's not OK
 						unmarkSquare();
 					}
 				} else {
 					// The same square's been clicked twice
 					unmarkSquare();
 				}
-				
+
 			}
 		};
 		return al;
 	}
-	
+
 	private void markSquare(Square square) {
 		square.mark();
 		markedSquare = square;
 	}
-	
+
 	/**
 	 * Unmark a square
 	 */
 	private void unmarkSquare() {
-		if(markedSquare == null) {
+		if (markedSquare == null) {
 			return;
 		}
 		markedSquare.unmark();
 		markedSquare = null;
 	}
-	
-	public void newGame(){
-		for (int i = 0; i < 8; i++){
+
+	/**
+	 * Start an new game.
+	 */
+	private void newGame() {
+		clearBoard();
+		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, false));
 			squares[i][6].setPiece(new Pawn(i, 6, true));
 		}
@@ -142,6 +174,19 @@ public class ChessBoard {
 		squares[5][7].setPiece(new Bishop(5, 7, true));
 		squares[6][7].setPiece(new Knight(6, 7, true));
 		squares[7][7].setPiece(new Rook(7, 7, true));
+	}
+	
+	/**
+	 * Clear the board of all pieces.
+	 */
+	private void clearBoard() {
+		for (Square[] row: squares) {
+			for (Square s: row) {
+				if (s.isBlocked()) {
+					s.removePiece();
+				}
+			}
+		}
 	}
 
 }

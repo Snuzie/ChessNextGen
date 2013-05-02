@@ -18,7 +18,6 @@ public class Square extends JButton {
 
 	public Square(String text, Color color, Location location, ActionListener al) {
 		this.location = location;
-		//super.setText(text);
 		super.setPreferredSize(new Dimension(50, 50));
 		super.setOpaque(true);
 		super.setForeground(Color.BLACK);
