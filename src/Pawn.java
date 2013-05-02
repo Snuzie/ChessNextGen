@@ -9,10 +9,10 @@ public class Pawn extends Piece {
 		originalY = y;
 		if (isWhite) {
 			setImage("Icons/WP.png");
-			movement = -1;
+			movement = 1;
 		} else {
 			setImage("Icons/BP.png");
-			movement = 1;
+			movement = -1;
 		}
 	}
 
