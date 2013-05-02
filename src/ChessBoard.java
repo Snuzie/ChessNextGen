@@ -40,6 +40,8 @@ public class ChessBoard {
 	private void makeBoard() {
 		frame = new JFrame("ChessWindow");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			// Program exits when window closes
+		
 		makeMenuBar(frame);
 <<<<<<< HEAD
 		log = new Log();
@@ -56,6 +58,7 @@ public class ChessBoard {
 		contentPane.setLayout(layout);
 
 		squares = new Square[8][8];
+		
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 
@@ -106,6 +109,14 @@ public class ChessBoard {
 			}
 		});
 		fileMenu.add(openItem);
+
+		JMenuItem quitItem = new JMenuItem("Quit");
+		quitItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		fileMenu.add(quitItem);
 	}
 
 	/**
