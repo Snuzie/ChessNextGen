@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class ChessBoard {
 	private Square markedSquare;
 	private boolean lastMoveWhite = false;
 	private Log log;
+	private ArrayList<Piece> takenPieces;
 
 	public ChessBoard() {
 		makeBoard();
@@ -47,6 +49,7 @@ public class ChessBoard {
 		log = new Log();
 
 		squares = new Square[8][8];
+		takenPieces = new ArrayList<Piece>();
 
 		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
 		GridLayout layout = new GridLayout(1, 2, 10, 10);
@@ -140,12 +143,7 @@ public class ChessBoard {
 					HashSet<Square> moves = piece.calcMoves(ChessBoard.this);
 					if (moves.contains(clickedSquare)) {
 						// The move's OK
-						log.addMove(markedSquare, clickedSquare);
-						markedSquare.removePiece();
-						unmarkSquare();
-						clickedSquare.setPiece(piece);
-
-						lastMoveWhite = !lastMoveWhite;
+						move(markedSquare, clickedSquare);
 					} else {
 						// The move's not OK
 						unmarkSquare();
@@ -159,6 +157,26 @@ public class ChessBoard {
 		};
 		return al;
 	}
+	
+	/**
+	 * Move a piece from one square to another.
+	 * @param from 
+	 * @param to
+	 */
+	private void move(Square from, Square to) {
+		
+		if (to.isBlocked()) {
+			Piece taken = to.removePiece();
+			takenPieces.add(taken);
+			if (King.class.isInstance(taken)) {
+				log.gameOver();
+			}
+		}
+		to.setPiece(from.removePiece());
+		unmarkSquare();
+		lastMoveWhite = !lastMoveWhite;
+		log.addMove(from, to);
+	}
 
 	/**
 	 * Start an new game.
@@ -166,26 +184,26 @@ public class ChessBoard {
 	private void newGame() {
 		clearBoard();
 		for (int i = 0; i < 8; i++) {
-			squares[i][1].setPiece(new Pawn(i, 1, true));
-			squares[i][6].setPiece(new Pawn(i, 6, false));
+			squares[i][1].setPiece(new Pawn(i, 1, false));
+			squares[i][6].setPiece(new Pawn(i, 6, true));
 		}
-		squares[0][0].setPiece(new Rook(0, 0, true));
-		squares[1][0].setPiece(new Knight(1, 0, true));
-		squares[2][0].setPiece(new Bishop(2, 0, true));
-		squares[3][0].setPiece(new Queen(3, 0, true));
-		squares[4][0].setPiece(new King(4, 0, true));
-		squares[5][0].setPiece(new Bishop(5, 0, true));
-		squares[6][0].setPiece(new Knight(6, 0, true));
-		squares[7][0].setPiece(new Rook(7, 0, true));
+		squares[0][0].setPiece(new Rook(0, 0, false));
+		squares[1][0].setPiece(new Knight(1, 0, false));
+		squares[2][0].setPiece(new Bishop(2, 0, false));
+		squares[3][0].setPiece(new King(3, 0, false));
+		squares[4][0].setPiece(new Queen(4, 0, false));
+		squares[5][0].setPiece(new Bishop(5, 0, false));
+		squares[6][0].setPiece(new Knight(6, 0, false));
+		squares[7][0].setPiece(new Rook(7, 0, false));
 
-		squares[0][7].setPiece(new Rook(0, 7, false));
-		squares[1][7].setPiece(new Knight(1, 7, false));
-		squares[2][7].setPiece(new Bishop(2, 7, false));
-		squares[3][7].setPiece(new Queen(3, 7, false));
-		squares[4][7].setPiece(new King(4, 7, false));
-		squares[5][7].setPiece(new Bishop(5, 7, false));
-		squares[6][7].setPiece(new Knight(6, 7, false));
-		squares[7][7].setPiece(new Rook(7, 7, false));
+		squares[0][7].setPiece(new Rook(0, 7, true));
+		squares[1][7].setPiece(new Knight(1, 7, true));
+		squares[2][7].setPiece(new Bishop(2, 7, true));
+		squares[3][7].setPiece(new King(3, 7, true));
+		squares[4][7].setPiece(new Queen(4, 7, true));
+		squares[5][7].setPiece(new Bishop(5, 7, true));
+		squares[6][7].setPiece(new Knight(6, 7, true));
+		squares[7][7].setPiece(new Rook(7, 7, true));
 	}
 
 	/**
