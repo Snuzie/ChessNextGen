@@ -2,14 +2,14 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 
 public class Log extends JPanel {
-	private JList list = new JList();
-	private DefaultListModel listModel;
+	private JList<String> list;
+	private DefaultListModel<String> listModel;
 	
 	public Log() {
 		super(new BorderLayout());
 		
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
+        listModel = new DefaultListModel<String>();
+        list = new JList<String>(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
         list.setVisibleRowCount(5);
