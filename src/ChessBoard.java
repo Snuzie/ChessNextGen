@@ -17,6 +17,7 @@ public class ChessBoard {
 	private Square markedSquare;
 	private boolean lastMoveWhite = false;
 	private Log log;
+	private PiecesLog piecesLog;
 	private ArrayList<Piece> takenPieces;
 
 	public ChessBoard() {
@@ -45,7 +46,7 @@ public class ChessBoard {
 		// Program exits when window closes
 
 		makeMenuBar(frame);
-
+		piecesLog = new PiecesLog();
 		log = new Log();
 
 		squares = new Square[8][8];
@@ -77,6 +78,7 @@ public class ChessBoard {
 				squares[row][col] = enruta;
 			}
 		}
+		contentPane.add(piecesLog);
 		contentPane.add(chessBoard);
 		contentPane.add(log);
 		frame.pack();
@@ -168,6 +170,7 @@ public class ChessBoard {
 		log.addMove(from, to);
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
+			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
 			if (King.class.isInstance(taken)) {
 				log.gameOver();
