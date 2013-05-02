@@ -19,7 +19,7 @@ public class ChessBoard {
 
 	public ChessBoard() {
 		makeBoard();
-		//newGame();
+		newGame();
 	}
 
 	public Square getMarkedSquare() {
@@ -40,25 +40,23 @@ public class ChessBoard {
 	private void makeBoard() {
 		frame = new JFrame("ChessWindow");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			// Program exits when window closes
-		
+		// Program exits when window closes
+
 		makeMenuBar(frame);
-<<<<<<< HEAD
+
 		log = new Log();
+
 		squares = new Square[8][8];
 
 		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
 		GridLayout layout = new GridLayout(1, 2, 10, 10);
-=======
-		GridLayout layout = new GridLayout(8, 8, 0, 0);
->>>>>>> Programmet avslutas när man stänger programmet
 
 		Container contentPane = frame.getContentPane();
 		JPanel chessBoard = new JPanel(boardLayout);
 		contentPane.setLayout(layout);
 
 		squares = new Square[8][8];
-		
+
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 
@@ -146,7 +144,7 @@ public class ChessBoard {
 						markedSquare.removePiece();
 						unmarkSquare();
 						clickedSquare.setPiece(piece);
-						
+
 						lastMoveWhite = !lastMoveWhite;
 					} else {
 						// The move's not OK
