@@ -53,10 +53,10 @@ public class ChessBoard {
 		takenPieces = new ArrayList<Piece>();
 
 		Container contentPane = frame.getContentPane();
-		
+
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
 		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
-		
+
 		contentPane.setLayout(layout);
 		JPanel chessBoard = new JPanel(boardLayout);
 
@@ -131,6 +131,10 @@ public class ChessBoard {
 			public void actionPerformed(ActionEvent evt) {
 
 				Square clickedSquare = (Square) evt.getSource();
+				Piece clickedPiece;
+				if (clickedSquare.isBlocked()) {
+					clickedPiece = clickedSquare.getPiece();
+				}
 
 				if (markedSquare == null) {
 					// There's no marked square on the board
@@ -147,9 +151,12 @@ public class ChessBoard {
 					if (moves.contains(clickedSquare)) {
 						// The move's OK
 						move(markedSquare, clickedSquare);
-					} else {
-						// The move's not OK
-						unmarkSquare();
+					} else if (clickedSquare.isBlocked()) {
+						Piece p = clickedSquare.getPiece();
+						if (p.isWhite != lastMoveWhite) {
+							unmarkSquare();
+							markSquare(clickedSquare);
+						}
 					}
 				} else {
 					// The same square's been clicked twice
@@ -160,10 +167,11 @@ public class ChessBoard {
 		};
 		return al;
 	}
-	
+
 	/**
 	 * Move a piece from one square to another.
-	 * @param from 
+	 * 
+	 * @param from
 	 * @param to
 	 */
 	private void move(Square from, Square to) {
@@ -175,17 +183,16 @@ public class ChessBoard {
 			takenPieces.add(taken);
 			if (King.class.isInstance(taken)) {
 				log.gameOver();
-				
-				Object[] options={"New Game", "Quit"};
-				
+
+				Object[] options = { "New Game", "Quit" };
+
 				int n = JOptionPane.showOptionDialog(new JFrame(),
-				    "Would you like to start a new game?",
-				    "New game?",
-				    JOptionPane.YES_NO_OPTION,
-				    JOptionPane.QUESTION_MESSAGE,
-				    null,     //do not use a custom Icon
-				    options,  //the titles of buttons
-				    options[0]); //default button title
+						"Would you like to start a new game?", "New game?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, // do not use a
+															// custom Icon
+						options, // the titles of buttons
+						options[0]); // default button title
 				if (n == 0) {
 					newGame();
 					unmarkSquare();
@@ -196,8 +203,8 @@ public class ChessBoard {
 			}
 		}
 		to.setPiece(from.removePiece());
-		if (Pawn.class.isInstance(to.getPiece())){
-			Pawn pawn = (Pawn)to.getPiece();
+		if (Pawn.class.isInstance(to.getPiece())) {
+			Pawn pawn = (Pawn) to.getPiece();
 			if (pawn.isPromoteable())
 				pawn.promote(this);
 		}

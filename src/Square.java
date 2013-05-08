@@ -14,9 +14,11 @@ public class Square extends JButton {
 	private static final long serialVersionUID = 1L;
 	private Piece piece;
 	private Location location;
+	private Color color; // the color of the square
 	
 
 	public Square(String text, Color color, Location location, ActionListener al) {
+		this.color = color;
 		this.location = location;
 		super.setPreferredSize(new Dimension(50, 50));
 		super.setOpaque(true);
@@ -67,14 +69,15 @@ public class Square extends JButton {
 	 * Mark the square
 	 */
 	public void mark() {
-		setBorderColor(Color.RED);
+		super.setBackground(Color.GREEN);
+		super.updateUI();
 	}
 	
 	/**
 	 * Unmark the square
 	 */
 	public void unmark() {
-		setBorderColor(Color.BLACK);
+		super.setBackground(color);
 	}
 
 	/**
