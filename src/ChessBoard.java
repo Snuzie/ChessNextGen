@@ -24,10 +24,12 @@ public class ChessBoard implements Serializable {
 	private Log log;
 	private PiecesLog piecesLog;
 	private ArrayList<Piece> takenPieces;
+	private IOReader ioReader;
 
 	public ChessBoard() {
 		makeBoard();
 		newGame();
+		ioReader = new IOReader(squares);
 	}
 
 	public Square getMarkedSquare() {
@@ -118,10 +120,18 @@ public class ChessBoard implements Serializable {
 		menubar.add(helpMenu);
 
 		// Add menu items to the menus
-		JMenuItem openItem = new JMenuItem("New Game");
-		openItem.addActionListener(new ActionListener() {
+		JMenuItem newGameItem = new JMenuItem("New Game");
+		newGameItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				newGame();
+			}
+		});
+		fileMenu.add(newGameItem);
+		
+		JMenuItem openItem = new JMenuItem("Open");
+		openItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ioReader.getBoard();
 			}
 		});
 		fileMenu.add(openItem);

@@ -5,9 +5,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JFileChooser;
+
 public class IOReader {
 	private File file;
 	private Square[][] board;
+	private static JFileChooser fileChooser = new JFileChooser(
+			System.getProperty("user.dir"));
 
 	public IOReader(Square[][] board) {
 		this.board = board;
@@ -15,15 +19,21 @@ public class IOReader {
 		store(file);
 	}
 
+	public boolean getBoard() {
+		int returnVal = fileChooser.showOpenDialog(null);
+
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			return false; // cancelled
+		}
+		File selectedFile = fileChooser.getSelectedFile();
+		return loadFile(selectedFile);
+	}
+
 	public boolean store(File f) {
 		try {
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			for (Square[] row : board) {
-				for (Square s : row) {
-					oos.writeObject(s);
-				}
- 			}
+			oos.writeObject(board);
 			oos.close();
 			fos.close();
 		} catch (IOException ex) {
@@ -35,17 +45,17 @@ public class IOReader {
 		return true;
 	}
 
-	public boolean load(File f) {
+	public boolean loadFile(File f) {
 		try {
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-//			this.games = (HashMap<Game, GameStatus>) ois.readObject();
+			board = (Square[][]) ois.readObject();
 			ois.close();
 			fis.close();
 		} catch (IOException e) {
 			return false;
-//		} catch (ClassNotFoundException e) {
-//			return false;
+		} catch (ClassNotFoundException e) {
+			return false;
 		}
 		return true;
 	}
