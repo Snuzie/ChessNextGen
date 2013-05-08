@@ -28,8 +28,6 @@ public class ChessBoard implements Serializable {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
-		
-		IOReader io = new IOReader(squares);
 	}
 
 	public Square getMarkedSquare() {
@@ -62,14 +60,21 @@ public class ChessBoard implements Serializable {
 		Container contentPane = frame.getContentPane();
 
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
-		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
+		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
 
 		contentPane.setLayout(layout);
 		JPanel chessBoard = new JPanel(boardLayout);
 
 		squares = new Square[8][8];
+		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
+				"H" };
+		chessBoard.add(new JLabel(""));
+		for (int i = 1; i <= 8; i++) {
+			chessBoard.add(new JLabel("      " + i));
+		}
 
 		for (int row = 0; row < 8; row++) {
+			chessBoard.add(new JLabel("      " + letters[row]));
 			for (int col = 0; col < 8; col++) {
 
 				ActionListener al = makeActionListener();
@@ -180,6 +185,19 @@ public class ChessBoard implements Serializable {
 	private void move(Square from, Square to) {
 
 		log.addMove(from, to);
+		// Check if move is castling.
+		if (King.class.isInstance(from.getPiece())) {
+			// Short castling
+			if (to.getPos().getRow() - from.getPos().getRow() == 2) {
+				move(squares[7][from.getPos().getColumn()], squares[5][from
+						.getPos().getColumn()]);
+				// Long castling
+			} else if (to.getPos().getRow() - from.getPos().getRow() == -2) {
+				move(squares[0][from.getPos().getColumn()], squares[3][from
+						.getPos().getColumn()]);
+			}
+			lastMoveWhite = !lastMoveWhite;
+		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
 			piecesLog.addTakenPiece(taken);
@@ -275,14 +293,14 @@ public class ChessBoard implements Serializable {
 		markedSquare = null;
 	}
 
-//	/**
-//	 * Unmark a given square.
-//	 */
-//	private void unmarkSquare(Square s) throws NullPointerException {
-//		if (s == null) {
-//			throw new NullPointerException();
-//		}
-//		s.unmark();
-//	}
+	// /**
+	// * Unmark a given square.
+	// */
+	// private void unmarkSquare(Square s) throws NullPointerException {
+	// if (s == null) {
+	// throw new NullPointerException();
+	// }
+	// s.unmark();
+	// }
 
 }

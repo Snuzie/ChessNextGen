@@ -42,5 +42,6 @@ public class Log extends JPanel {
 	
 	public void clearLog(){
 		listModel.clear();
+		moveCount = 1;
 	}
 }

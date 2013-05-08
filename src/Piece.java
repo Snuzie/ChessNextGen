@@ -14,7 +14,7 @@ public abstract class Piece implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3577514704115456525L;
-	protected int x, y;
+	protected int x, y, numMoves=-1;
 	protected boolean isWhite;
 	protected HashSet<Square> moves;
 	transient BufferedImage img;
@@ -42,6 +42,7 @@ public abstract class Piece implements Serializable {
 	public void setLocation(int row, int col) {
 		this.y = col;
 		this.x = row;
+		this.numMoves++;
 	}
 	
 	/**
