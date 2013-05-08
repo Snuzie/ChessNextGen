@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public abstract class Piece {
-	protected int x, y;
+	protected int x, y, numMoves=-1;
 	protected boolean isWhite;
 	protected HashSet<Square> moves;
 	protected BufferedImage img;
@@ -35,6 +35,7 @@ public abstract class Piece {
 	public void setLocation(int row, int col) {
 		this.y = col;
 		this.x = row;
+		this.numMoves++;
 	}
 	
 	/**

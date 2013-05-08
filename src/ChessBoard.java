@@ -177,6 +177,17 @@ public class ChessBoard {
 	private void move(Square from, Square to) {
 
 		log.addMove(from, to);
+		// Check if move is castling.
+		if (King.class.isInstance(from.getPiece())){
+			// Short castling
+			if (to.getPos().getRow()-from.getPos().getRow() == 2) {
+				move(squares[7][from.getPos().getColumn()],squares[5][from.getPos().getColumn()]);
+			// Long castling
+			} else if(to.getPos().getRow()-from.getPos().getRow() == -2) {
+				move(squares[0][from.getPos().getColumn()],squares[3][from.getPos().getColumn()]);
+			}
+			lastMoveWhite = !lastMoveWhite;
+		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
 			piecesLog.addTakenPiece(taken);
