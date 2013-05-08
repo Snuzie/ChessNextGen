@@ -35,6 +35,10 @@ public class Log extends JPanel {
 		listModel.addElement(moveCount + ". " + s1 + "->" + s2);
 		moveCount++;
 	}
+
+	public void check() {
+		listModel.set(listModel.getSize()-1, listModel.elementAt(listModel.getSize()-1)+"Check");
+	}
 	
 	public void gameOver() {
 		listModel.addElement("Game Over!");

@@ -25,6 +25,7 @@ public class ChessBoard implements Serializable {
 	private PiecesLog piecesLog;
 	private ArrayList<Piece> takenPieces;
 	private IOReader ioReader;
+	private King kingW, kingB;
 
 	public ChessBoard() {
 		makeBoard();
@@ -256,20 +257,22 @@ public class ChessBoard implements Serializable {
 			squares[i][1].setPiece(new Pawn(i, 1, true));
 			squares[i][6].setPiece(new Pawn(i, 6, false));
 		}
+		kingW = new King(4, 0, true);
 		squares[0][0].setPiece(new Rook(0, 0, true));
 		squares[1][0].setPiece(new Knight(1, 0, true));
 		squares[2][0].setPiece(new Bishop(2, 0, true));
 		squares[3][0].setPiece(new Queen(3, 0, true));
-		squares[4][0].setPiece(new King(4, 0, true));
+		squares[4][0].setPiece(kingW);
 		squares[5][0].setPiece(new Bishop(5, 0, true));
 		squares[6][0].setPiece(new Knight(6, 0, true));
 		squares[7][0].setPiece(new Rook(7, 0, true));
 
+		kingB = new King(4, 7, false);
 		squares[0][7].setPiece(new Rook(0, 7, false));
 		squares[1][7].setPiece(new Knight(1, 7, false));
 		squares[2][7].setPiece(new Bishop(2, 7, false));
 		squares[3][7].setPiece(new Queen(3, 7, false));
-		squares[4][7].setPiece(new King(4, 7, false));
+		squares[4][7].setPiece(kingB);
 		squares[5][7].setPiece(new Bishop(5, 7, false));
 		squares[6][7].setPiece(new Knight(6, 7, false));
 		squares[7][7].setPiece(new Rook(7, 7, false));
