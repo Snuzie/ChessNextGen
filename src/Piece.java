@@ -1,19 +1,26 @@
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-public abstract class Piece {
-	protected int x, y, numMoves=-1;
+public abstract class Piece implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3577514704115456525L;
+	protected int x, y;
 	protected boolean isWhite;
 	protected HashSet<Square> moves;
-	protected BufferedImage img;
+	transient BufferedImage img;
 	protected ImageIcon icon;
 
-	public Piece(int x, int y, boolean isWhite){
+	public Piece(int x, int y, boolean isWhite) {
 		this.x = x;
 		this.y = y;
 		this.isWhite = isWhite;
@@ -35,7 +42,6 @@ public abstract class Piece {
 	public void setLocation(int row, int col) {
 		this.y = col;
 		this.x = row;
-		this.numMoves++;
 	}
 	
 	/**
@@ -73,4 +79,16 @@ public abstract class Piece {
 			e.printStackTrace();
 		}
 	}
+	
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeInt(1); // how many images are serialized?
+        ImageIO.write(img, "png", out); // png is lossless
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();        
+        img = ImageIO.read(in);
+    }
+
 }

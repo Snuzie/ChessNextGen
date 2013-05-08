@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -11,7 +12,11 @@ import javax.swing.*;
  * @author Edward Grippe
  * 
  */
-public class ChessBoard {
+public class ChessBoard implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2893850641232344190L;
 	private JFrame frame;
 	private Square[][] squares; // En matris med alla rutor på brädet
 	private Square markedSquare;
@@ -23,6 +28,8 @@ public class ChessBoard {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
+		
+		IOReader io = new IOReader(squares);
 	}
 
 	public Square getMarkedSquare() {
@@ -53,22 +60,18 @@ public class ChessBoard {
 		takenPieces = new ArrayList<Piece>();
 
 		Container contentPane = frame.getContentPane();
-		
+
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
-		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
-		
+		GridLayout boardLayout = new GridLayout(8, 8, 0, 0);
+
 		contentPane.setLayout(layout);
 		JPanel chessBoard = new JPanel(boardLayout);
 
 		squares = new Square[8][8];
-		String[] letters = new String[]{"A","B","C","D","E","F","G","H"};
-		chessBoard.add(new JLabel(""));
-		for (int i = 1; i <= 8; i++){
-			chessBoard.add(new JLabel("      "+i));
-		}
+
 		for (int row = 0; row < 8; row++) {
-			chessBoard.add(new JLabel("      "+letters[row]));
 			for (int col = 0; col < 8; col++) {
+
 				ActionListener al = makeActionListener();
 
 				Square enruta = null;
@@ -82,11 +85,7 @@ public class ChessBoard {
 				chessBoard.add(enruta);
 				squares[row][col] = enruta;
 			}
-			//chessBoard.add(new JLabel(""+row));
 		}
-		/*for (int i = 0; i < 8; i++){
-			chessBoard.add(new JLabel(""+letters[i]));
-		}*/
 		contentPane.add(piecesLog);
 		contentPane.add(chessBoard);
 		contentPane.add(log);
@@ -155,9 +154,12 @@ public class ChessBoard {
 					if (moves.contains(clickedSquare)) {
 						// The move's OK
 						move(markedSquare, clickedSquare);
-					} else {
-						// The move's not OK
-						unmarkSquare();
+					} else if (clickedSquare.isBlocked()) {
+						Piece p = clickedSquare.getPiece();
+						if (p.isWhite != lastMoveWhite) {
+							unmarkSquare();
+							markSquare(clickedSquare);
+						}
 					}
 				} else {
 					// The same square's been clicked twice
@@ -168,43 +170,32 @@ public class ChessBoard {
 		};
 		return al;
 	}
-	
+
 	/**
 	 * Move a piece from one square to another.
-	 * @param from 
+	 * 
+	 * @param from
 	 * @param to
 	 */
 	private void move(Square from, Square to) {
 
 		log.addMove(from, to);
-		// Check if move is castling.
-		if (King.class.isInstance(from.getPiece())){
-			// Short castling
-			if (to.getPos().getRow()-from.getPos().getRow() == 2) {
-				move(squares[7][from.getPos().getColumn()],squares[5][from.getPos().getColumn()]);
-			// Long castling
-			} else if(to.getPos().getRow()-from.getPos().getRow() == -2) {
-				move(squares[0][from.getPos().getColumn()],squares[3][from.getPos().getColumn()]);
-			}
-			lastMoveWhite = !lastMoveWhite;
-		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
 			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
 			if (King.class.isInstance(taken)) {
 				log.gameOver();
-				
-				Object[] options={"New Game", "Quit"};
-				
+
+				Object[] options = { "New Game", "Quit" };
+
 				int n = JOptionPane.showOptionDialog(new JFrame(),
-				    "Would you like to start a new game?",
-				    "New game?",
-				    JOptionPane.YES_NO_OPTION,
-				    JOptionPane.QUESTION_MESSAGE,
-				    null,     //do not use a custom Icon
-				    options,  //the titles of buttons
-				    options[0]); //default button title
+						"Would you like to start a new game?", "New game?",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, // do not use a
+															// custom Icon
+						options, // the titles of buttons
+						options[0]); // default button title
 				if (n == 0) {
 					newGame();
 					unmarkSquare();
@@ -215,8 +206,8 @@ public class ChessBoard {
 			}
 		}
 		to.setPiece(from.removePiece());
-		if (Pawn.class.isInstance(to.getPiece())){
-			Pawn pawn = (Pawn)to.getPiece();
+		if (Pawn.class.isInstance(to.getPiece())) {
+			Pawn pawn = (Pawn) to.getPiece();
 			if (pawn.isPromoteable())
 				pawn.promote(this);
 		}
@@ -284,14 +275,14 @@ public class ChessBoard {
 		markedSquare = null;
 	}
 
-	/**
-	 * Unmark a given square.
-	 */
-	private void unmarkSquare(Square s) throws NullPointerException {
-		if (s == null) {
-			throw new NullPointerException();
-		}
-		s.unmark();
-	}
+//	/**
+//	 * Unmark a given square.
+//	 */
+//	private void unmarkSquare(Square s) throws NullPointerException {
+//		if (s == null) {
+//			throw new NullPointerException();
+//		}
+//		s.unmark();
+//	}
 
 }

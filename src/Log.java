@@ -4,6 +4,10 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 public class Log extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2891641623029590519L;
 	private JList list;
 	private DefaultListModel listModel;
 	private int moveCount = 1;
@@ -38,6 +42,5 @@ public class Log extends JPanel {
 	
 	public void clearLog(){
 		listModel.clear();
-		moveCount = 1;
 	}
 }

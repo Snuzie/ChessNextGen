@@ -2,6 +2,11 @@ import java.util.HashSet;
 
 
 public class Knight extends Piece {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 821727645988419378L;
+
 	public Knight(int x, int y, boolean isWhite){
 		super(x, y, isWhite);
 		

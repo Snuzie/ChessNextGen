@@ -2,6 +2,11 @@ import java.util.HashSet;
 
 
 public class Bishop extends Piece{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8673703631073561018L;
+
 	public Bishop(int x, int y, boolean isWhite){
 		super(x,y,isWhite);
 		

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.border.Border;
@@ -9,9 +10,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 
-public class Square extends JButton {
+public class Square extends JButton implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 800409143215388905L;
 	private Piece piece;
 	private Location location;
 	private Color color; // the color of the square

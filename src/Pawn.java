@@ -4,6 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Pawn extends Piece {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5139764631428804211L;
 	private int movement, originalX, originalY;
 
 	public Pawn(int x, int y, boolean isWhite) {

@@ -2,6 +2,11 @@ import java.util.HashSet;
 
 
 public class Rook extends Piece {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4794900229705246262L;
+
 	public Rook(int x, int y, boolean isWhite) {
 		super(x, y, isWhite);
 		
