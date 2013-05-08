@@ -75,11 +75,11 @@ public class Pawn extends Piece {
 	    if(s.equals("Queen")){
 	    	board.getSquare(x, y).setPiece(new Queen(x, y, isWhite));
 	    } else if (s.equals("Bishop")) {
-	    	board.getSquare(x, y).setPiece(new Queen(x, y, isWhite));
+	    	board.getSquare(x, y).setPiece(new Bishop(x, y, isWhite));
 	    } else if (s.equals("Knight")) {
-	    	board.getSquare(x, y).setPiece(new Queen(x, y, isWhite));
+	    	board.getSquare(x, y).setPiece(new Knight(x, y, isWhite));
 	    } else if (s.equals("Rook")) {
-	    	board.getSquare(x, y).setPiece(new Queen(x, y, isWhite));
+	    	board.getSquare(x, y).setPiece(new Rook(x, y, isWhite));
 	    } else {
 	    	throw new IllegalArgumentException();
 	    }
