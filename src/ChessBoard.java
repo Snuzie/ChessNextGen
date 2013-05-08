@@ -191,12 +191,13 @@ public class ChessBoard implements Serializable {
 			if (to.getPos().getRow() - from.getPos().getRow() == 2) {
 				move(squares[7][from.getPos().getColumn()], squares[5][from
 						.getPos().getColumn()]);
+				lastMoveWhite = !lastMoveWhite;
 				// Long castling
 			} else if (to.getPos().getRow() - from.getPos().getRow() == -2) {
 				move(squares[0][from.getPos().getColumn()], squares[3][from
 						.getPos().getColumn()]);
+				lastMoveWhite = !lastMoveWhite;
 			}
-			lastMoveWhite = !lastMoveWhite;
 		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
