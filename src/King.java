@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.HashSet;
 
 public class King extends Piece {
@@ -78,9 +79,10 @@ public class King extends Piece {
 		isPossibleChecker(board.getSquare(x + 1, y - 2));
 
 		for (Piece piece : possibleCheckers) {
-			if (piece.calcMoves(board).contains(board.getSquare(x, y)))
+			if (piece.calcMoves(board).contains(board.getSquare(x, y))) {
 				possibleCheckers.clear();
-			return true;
+				return true;
+			}
 		}
 		possibleCheckers.clear();
 		return false;
@@ -90,8 +92,9 @@ public class King extends Piece {
 		if (square == null)
 			return false;
 		if (square.isBlocked()) {
-			if (isWhite == square.getPiece().isWhite)
+			if (isWhite == square.getPiece().isWhite) {
 				return false;
+			}
 			possibleCheckers.add(square.getPiece());
 			return false;
 		}

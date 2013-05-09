@@ -29,6 +29,19 @@ public class PiecesLog extends JPanel {
 		JLabel picIcon = new JLabel(piece.getIcon());
 		super.add(picIcon);
 	}
+
+	/**
+	 * Remove a taken piece from pieces log
+	 * 
+	 * @param piece
+	 *            The piece to remove from the log
+	 * 
+	 */
+	public void removeTakenPiece(Piece piece) {
+		
+		JLabel picIcon = new JLabel(piece.getIcon());
+		super.remove(picIcon);
+	}
 	
 	/**
 	 * Clear the log

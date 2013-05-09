@@ -254,7 +254,6 @@ public class ChessBoard implements Serializable {
 	 */
 	private void move(Square from, Square to) {
 
-		log.addMove(from, to);
 		// Check if move is castling.
 		if (King.class.isInstance(from.getPiece())) {
 			// Short castling
@@ -274,6 +273,7 @@ public class ChessBoard implements Serializable {
 			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
 			if (King.class.isInstance(taken)) {
+				log.addMove(from, to);
 				log.gameOver();
 
 				Object[] options = { "New Game", "Quit" };
@@ -292,17 +292,52 @@ public class ChessBoard implements Serializable {
 				} else {
 					System.exit(0);
 				}
+				return;
+			}/* Försök till att fixa buggen som gör att pjäsen blir tagen när man tar en pjäs
+			men då blir i schack trots att ens drag återställs och det är ens tur igen.
+			if (kingW.isChecked(this) && !lastMoveWhite){
+				JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+				piecesLog.removeTakenPiece(taken);
+				takenPieces.remove(taken);
+				return;
 			}
+			if (kingB.isChecked(this) && lastMoveWhite){
+				JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+				piecesLog.removeTakenPiece(taken);
+				takenPieces.remove(taken);
+				return;
+			}*/
 		}
+		
 		to.setPiece(from.removePiece());
+		if (kingW.isChecked(this) && !lastMoveWhite){
+			JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+			from.setPiece(to.removePiece());
+			return;
+		}
+		if (kingB.isChecked(this) && lastMoveWhite){
+			JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+			from.setPiece(to.removePiece());
+			return;
+		}
+		if (kingW.isChecked(this) && lastMoveWhite){
+			JOptionPane.showMessageDialog(new JFrame(), "Check");
+		}
+		if (kingB.isChecked(this) && !lastMoveWhite){
+			JOptionPane.showMessageDialog(new JFrame(), "Check");
+		}
+		
+		// Check if pawn and if promoteable.
 		if (Pawn.class.isInstance(to.getPiece())) {
 			Pawn pawn = (Pawn) to.getPiece();
 			if (pawn.isPromoteable())
 				pawn.promote(this);
 		}
+		log.addMove(from, to);
 		unmarkSquare();
 		lastMoveWhite = !lastMoveWhite;
 	}
+
 
 	/**
 	 * Start an new game.
