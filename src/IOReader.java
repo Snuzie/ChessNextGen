@@ -33,6 +33,16 @@ public class IOReader {
 		File selectedFile = fileChooser.getSelectedFile();
 		return loadFile(selectedFile);
 	}
+	
+	public boolean saveBoard() {
+		int returnVal = fileChooser.showSaveDialog(null);
+
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			return false; // cancelled
+		}
+		File selectedFile = fileChooser.getSelectedFile();
+		return store(selectedFile);
+	}
 
 	public boolean store(File f) {
 		try {
@@ -51,12 +61,12 @@ public class IOReader {
 		return true;
 	}
 
-	public Object[] loadFile(File f) {
+	private Object[] loadFile(File f) {
 		Object[] arg = new Object[2];
 		try {
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			arg[0] = (JPanel) ois.readObject();
+			arg[0] = (JPanel	) ois.readObject();
 			arg[1] = (Square[][]) ois.readObject();
 			ois.close();
 			fis.close();

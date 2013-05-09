@@ -53,22 +53,22 @@ public class ChessBoard implements Serializable {
 		frame = new JFrame("Chess Leet!");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Program exits when window closes
-
+	
 		makeMenuBar(frame);
 		piecesLog = new PiecesLog();
 		log = new Log();
-
+	
 		squares = new Square[8][8];
 		takenPieces = new ArrayList<Piece>();
-
+	
 		Container contentPane = frame.getContentPane();
-
+	
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
 		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
-
+	
 		contentPane.setLayout(layout);
 		board = new JPanel(boardLayout);
-
+	
 		squares = new Square[8][8];
 		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
 				"H" };
@@ -76,13 +76,13 @@ public class ChessBoard implements Serializable {
 		for (int i = 1; i <= 8; i++) {
 			board.add(new JLabel("      " + i));
 		}
-
+	
 		for (int row = 0; row < 8; row++) {
 			board.add(new JLabel("      " + letters[row]));
 			for (int col = 0; col < 8; col++) {
-
+	
 				ActionListener al = makeActionListener();
-
+	
 				Square enruta = null;
 				String text = row + ":" + col;
 				Location location = new Location(row, col);
@@ -130,7 +130,7 @@ public class ChessBoard implements Serializable {
 		});
 		fileMenu.add(newGameItem);
 		
-		JMenuItem openItem = new JMenuItem("Open");
+		JMenuItem openItem = new JMenuItem("Load Game");
 		openItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object[] arg = ioReader.getBoard();
@@ -141,6 +141,18 @@ public class ChessBoard implements Serializable {
 			}
 		});
 		fileMenu.add(openItem);
+		
+		JMenuItem saveItem = new JMenuItem("Save Game");
+		saveItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					ioReader.saveBoard();
+				} catch (Exception ex) {}
+				
+				System.out.println("Saved!");
+			}
+		});
+		fileMenu.add(saveItem);
 
 		JMenuItem quitItem = new JMenuItem("Quit");
 		quitItem.addActionListener(new ActionListener() {
