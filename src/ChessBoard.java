@@ -19,6 +19,7 @@ public class ChessBoard implements Serializable {
 	private static final long serialVersionUID = 2893850641232344190L;
 	private JFrame frame;
 	private Square[][] squares; // En matris med alla rutor på brädet
+	private JPanel board;
 	private Square markedSquare;
 	private boolean lastMoveWhite = false;
 	private Log log;
@@ -30,7 +31,7 @@ public class ChessBoard implements Serializable {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
-		ioReader = new IOReader(squares);
+		ioReader = new IOReader(board, squares);
 	}
 
 	public Square getMarkedSquare() {
@@ -66,18 +67,18 @@ public class ChessBoard implements Serializable {
 		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
 
 		contentPane.setLayout(layout);
-		JPanel chessBoard = new JPanel(boardLayout);
+		board = new JPanel(boardLayout);
 
 		squares = new Square[8][8];
 		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
 				"H" };
-		chessBoard.add(new JLabel(""));
+		board.add(new JLabel(""));
 		for (int i = 1; i <= 8; i++) {
-			chessBoard.add(new JLabel("      " + i));
+			board.add(new JLabel("      " + i));
 		}
 
 		for (int row = 0; row < 8; row++) {
-			chessBoard.add(new JLabel("      " + letters[row]));
+			board.add(new JLabel("      " + letters[row]));
 			for (int col = 0; col < 8; col++) {
 
 				ActionListener al = makeActionListener();
@@ -90,12 +91,12 @@ public class ChessBoard implements Serializable {
 				} else {
 					enruta = new Square(text, Color.WHITE, location, al);
 				}
-				chessBoard.add(enruta);
+				board.add(enruta);
 				squares[row][col] = enruta;
 			}
 		}
 		contentPane.add(piecesLog);
-		contentPane.add(chessBoard);
+		contentPane.add(board);
 		contentPane.add(log);
 		frame.pack();
 		frame.setVisible(true);
@@ -132,7 +133,11 @@ public class ChessBoard implements Serializable {
 		JMenuItem openItem = new JMenuItem("Open");
 		openItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ioReader.getBoard();
+				Object[] arg = ioReader.getBoard();
+//				ChessBoard.this.board = (JPanel) arg[0];
+//				ChessBoard.this.squares = (Square[][]) arg[1];
+				fillBoard((Square[][]) arg[1]);
+				System.out.println("LOADED!");
 			}
 		});
 		fileMenu.add(openItem);
@@ -144,6 +149,48 @@ public class ChessBoard implements Serializable {
 			}
 		});
 		fileMenu.add(quitItem);
+	}
+	
+	private void fillBoard(Square[][] squares) {
+		Container contentPane = frame.getContentPane();
+		
+		contentPane.remove(piecesLog);
+		contentPane.remove(board);
+		contentPane.remove(log);
+		
+		piecesLog = new PiecesLog();
+		log = new Log();
+
+
+		takenPieces = new ArrayList<Piece>();
+
+		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
+		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
+
+		contentPane.setLayout(layout);
+		board = new JPanel(boardLayout);
+
+		this.squares = squares;
+		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
+				"H" };
+		board.add(new JLabel(""));
+		for (int i = 1; i <= 8; i++) {
+			board.add(new JLabel("      " + i));
+		}
+
+		for (int row = 0; row < 8; row++) {
+			board.add(new JLabel("      " + letters[row]));
+			for (int col = 0; col < 8; col++) {
+				Square enruta = null;
+				enruta = squares[row][col];
+				board.add(enruta);
+			}
+		}
+		contentPane.add(piecesLog);
+		contentPane.add(board);
+		contentPane.add(log);
+		frame.pack();
+		frame.setVisible(true);
 	}
 
 	/**
