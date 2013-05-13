@@ -33,6 +33,7 @@ public class Log extends JPanel {
 		String s2 = "" + letters[to.getPos().getRow()]
 				+ (to.getPos().getColumn()+1);
 		listModel.addElement(moveCount + ". " + s1 + "->" + s2);
+		list.ensureIndexIsVisible(moveCount - 1);
 		moveCount++;
 	}
 
