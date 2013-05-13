@@ -31,7 +31,7 @@ public class ChessBoard implements Serializable {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
-		ioReader = new IOReader(board, squares);
+		ioReader = new IOReader(board, squares, lastMoveWhite, log, takenPieces);
 	}
 
 	public Square getMarkedSquare() {
@@ -53,22 +53,22 @@ public class ChessBoard implements Serializable {
 		frame = new JFrame("Chess Leet!");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Program exits when window closes
-	
+
 		makeMenuBar(frame);
 		piecesLog = new PiecesLog();
 		log = new Log();
-	
+
 		squares = new Square[8][8];
 		takenPieces = new ArrayList<Piece>();
-	
+
 		Container contentPane = frame.getContentPane();
-	
+
 		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
 		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
-	
+
 		contentPane.setLayout(layout);
 		board = new JPanel(boardLayout);
-	
+
 		squares = new Square[8][8];
 		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
 				"H" };
@@ -76,13 +76,13 @@ public class ChessBoard implements Serializable {
 		for (int i = 1; i <= 8; i++) {
 			board.add(new JLabel("      " + i));
 		}
-	
+
 		for (int row = 0; row < 8; row++) {
 			board.add(new JLabel("      " + letters[row]));
 			for (int col = 0; col < 8; col++) {
-	
+
 				ActionListener al = makeActionListener();
-	
+
 				Square enruta = null;
 				String text = row + ":" + col;
 				Location location = new Location(row, col);
@@ -129,26 +129,28 @@ public class ChessBoard implements Serializable {
 			}
 		});
 		fileMenu.add(newGameItem);
-		
+
 		JMenuItem openItem = new JMenuItem("Load Game");
 		openItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object[] arg = ioReader.getBoard();
-//				ChessBoard.this.board = (JPanel) arg[0];
-//				ChessBoard.this.squares = (Square[][]) arg[1];
-				fillBoard((Square[][]) arg[1]);
+				// ChessBoard.this.board = (JPanel) arg[0];
+				// ChessBoard.this.squares = (Square[][]) arg[1];
+				fillBoard((Square[][]) arg[1], (Boolean) arg[2], (Log) arg[3],
+						(ArrayList<Piece>) arg[4]);
 				System.out.println("LOADED!");
 			}
 		});
 		fileMenu.add(openItem);
-		
+
 		JMenuItem saveItem = new JMenuItem("Save Game");
 		saveItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					ioReader.saveBoard();
-				} catch (Exception ex) {}
-				
+				} catch (Exception ex) {
+				}
+
 				System.out.println("Saved!");
 			}
 		});
@@ -162,47 +164,80 @@ public class ChessBoard implements Serializable {
 		});
 		fileMenu.add(quitItem);
 	}
-	
-	private void fillBoard(Square[][] squares) {
+
+	private void fillBoard(Square[][] squares, boolean lastMoveWhite, Log log,
+			ArrayList<Piece> takenPieces) {
 		Container contentPane = frame.getContentPane();
-		
-		contentPane.remove(piecesLog);
-		contentPane.remove(board);
-		contentPane.remove(log);
-		
-		piecesLog = new PiecesLog();
-		log = new Log();
+		try {
+			this.piecesLog.clear();
 
+			this.piecesLog.updateUI();
+			contentPane.remove(this.piecesLog);
+			contentPane.remove(this.board);
+			contentPane.remove(this.log);
+			markedSquare = null;
 
-		takenPieces = new ArrayList<Piece>();
+			this.takenPieces = takenPieces;
+			this.log = log;
+			this.lastMoveWhite = lastMoveWhite;
 
-		BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
-		GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
+			BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
+			GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
 
-		contentPane.setLayout(layout);
-		board = new JPanel(boardLayout);
+			contentPane.setLayout(layout);
+			board = new JPanel(boardLayout);
 
-		this.squares = squares;
-		String[] letters = new String[] { "A", "B", "C", "D", "E", "F", "G",
-				"H" };
-		board.add(new JLabel(""));
-		for (int i = 1; i <= 8; i++) {
-			board.add(new JLabel("      " + i));
-		}
+			this.squares = new Square[8][8];
+			Square[][] oldSquares = squares;
 
-		for (int row = 0; row < 8; row++) {
-			board.add(new JLabel("      " + letters[row]));
-			for (int col = 0; col < 8; col++) {
-				Square enruta = null;
-				enruta = squares[row][col];
-				board.add(enruta);
+			for (Piece p : takenPieces) {
+				this.piecesLog.addTakenPiece(p);
 			}
+			this.piecesLog.updateUI();
+
+			String[] letters = new String[] { "A", "B", "C", "D", "E", "F",
+					"G", "H" };
+			board.add(new JLabel(""));
+			for (int i = 1; i <= 8; i++) {
+				board.add(new JLabel("      " + i));
+			}
+
+			for (int row = 0; row < 8; row++) {
+				board.add(new JLabel("      " + letters[row]));
+				for (int col = 0; col < 8; col++) {
+
+					ActionListener al = makeActionListener();
+
+					Square enruta = null;
+					Piece p = null;
+					String text = row + ":" + col;
+					Location location = new Location(row, col);
+					if ((row + col) % 2 == 0) {
+						enruta = new Square(text, Color.GRAY, location, al);
+						if (squares[row][col].isBlocked()) {
+							p = oldSquares[row][col].getPiece();
+							enruta.setPiece(p);
+						}
+					} else {
+						enruta = new Square(text, Color.WHITE, location, al);
+						if (squares[row][col].isBlocked()) {
+							p = oldSquares[row][col].getPiece();
+							enruta.setPiece(p);
+						}
+					}
+					board.add(enruta);
+					this.squares[row][col] = enruta;
+				}
+			}
+			contentPane.add(this.piecesLog);
+			contentPane.add(board);
+			contentPane.add(log);
+
+			frame.pack();
+			frame.setVisible(true);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
-		contentPane.add(piecesLog);
-		contentPane.add(board);
-		contentPane.add(log);
-		frame.pack();
-		frame.setVisible(true);
 	}
 
 	/**
@@ -216,29 +251,41 @@ public class ChessBoard implements Serializable {
 
 				if (markedSquare == null) {
 					// There's no marked square on the board
+
 					if (clickedSquare.isBlocked()) {
+
 						Piece p = clickedSquare.getPiece();
 						if (p.isWhite != lastMoveWhite) {
 							markSquare(clickedSquare);
+
 						}
 					}
 				} else if (markedSquare != clickedSquare) {
 					// There's already a marked square on the board
+
 					Piece piece = markedSquare.getPiece();
 					HashSet<Square> moves = piece.calcMoves(ChessBoard.this);
+
+					Location l = clickedSquare.getPos();
+					System.out.println("row: " + l.getRow() + " col: "
+							+ l.getColumn());
 					if (moves.contains(clickedSquare)) {
 						// The move's OK
+						
 						move(markedSquare, clickedSquare);
 					} else if (clickedSquare.isBlocked()) {
 						Piece p = clickedSquare.getPiece();
+						
 						if (p.isWhite != lastMoveWhite) {
 							unmarkSquare();
 							markSquare(clickedSquare);
 						}
 					}
+					
 				} else {
 					// The same square's been clicked twice
 					unmarkSquare();
+					
 				}
 
 			}
@@ -293,40 +340,41 @@ public class ChessBoard implements Serializable {
 					System.exit(0);
 				}
 				return;
-			}/* Försök till att fixa buggen som gör att pjäsen blir tagen när man tar en pjäs
-			men då blir i schack trots att ens drag återställs och det är ens tur igen.
-			if (kingW.isChecked(this) && !lastMoveWhite){
-				JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
-				piecesLog.removeTakenPiece(taken);
-				takenPieces.remove(taken);
-				return;
-			}
-			if (kingB.isChecked(this) && lastMoveWhite){
-				JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
-				piecesLog.removeTakenPiece(taken);
-				takenPieces.remove(taken);
-				return;
-			}*/
+			}/*
+			 * Försök till att fixa buggen som gör att pjäsen blir tagen när man
+			 * tar en pjäs men då blir i schack trots att ens drag återställs
+			 * och det är ens tur igen. if (kingW.isChecked(this) &&
+			 * !lastMoveWhite){ JOptionPane.showMessageDialog(new JFrame(),
+			 * "Invalid move. King is checked.");
+			 * piecesLog.removeTakenPiece(taken); takenPieces.remove(taken);
+			 * return; } if (kingB.isChecked(this) && lastMoveWhite){
+			 * JOptionPane.showMessageDialog(new JFrame(),
+			 * "Invalid move. King is checked.");
+			 * piecesLog.removeTakenPiece(taken); takenPieces.remove(taken);
+			 * return; }
+			 */
 		}
-		
+
 		to.setPiece(from.removePiece());
-		if (kingW.isChecked(this) && !lastMoveWhite){
-			JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+		if (kingW.isChecked(this) && !lastMoveWhite) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Invalid move. King is checked.");
 			from.setPiece(to.removePiece());
 			return;
 		}
-		if (kingB.isChecked(this) && lastMoveWhite){
-			JOptionPane.showMessageDialog(new JFrame(), "Invalid move. King is checked.");
+		if (kingB.isChecked(this) && lastMoveWhite) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Invalid move. King is checked.");
 			from.setPiece(to.removePiece());
 			return;
 		}
-		if (kingW.isChecked(this) && lastMoveWhite){
+		if (kingW.isChecked(this) && lastMoveWhite) {
 			JOptionPane.showMessageDialog(new JFrame(), "Check");
 		}
-		if (kingB.isChecked(this) && !lastMoveWhite){
+		if (kingB.isChecked(this) && !lastMoveWhite) {
 			JOptionPane.showMessageDialog(new JFrame(), "Check");
 		}
-		
+
 		// Check if pawn and if promoteable.
 		if (Pawn.class.isInstance(to.getPiece())) {
 			Pawn pawn = (Pawn) to.getPiece();
@@ -337,7 +385,6 @@ public class ChessBoard implements Serializable {
 		unmarkSquare();
 		lastMoveWhite = !lastMoveWhite;
 	}
-
 
 	/**
 	 * Start an new game.
