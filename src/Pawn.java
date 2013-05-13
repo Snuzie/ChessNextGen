@@ -31,12 +31,6 @@ public class Pawn extends Piece {
 			checkMove(board.getSquare(x, y + (2*movement)));
 		checkAttackMove(board.getSquare(x - 1, y + movement));
 		checkAttackMove(board.getSquare(x + 1, y + movement));
-		System.out.println("mšjliga moves: " + moves.size());
-		for (Square s : moves) {
-			Location l = s.getPos();
-			System.out.println("Row: " + l.getRow() + "Col: " + l.getColumn());
-		}
-		System.out.println("");
 		return moves;
 	}
 
