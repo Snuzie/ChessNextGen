@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.*;
@@ -14,14 +15,16 @@ public class Log extends JPanel {
 	private static String letters[] = new String[]
 			{"A","B","C","D","E","F","G","H"};
 	
-	public Log() {
+	public Log(Color background, Color foreground) {
 		super(new BorderLayout());
 		super.setPreferredSize(new Dimension(200, 200));
         listModel = new DefaultListModel();
         list = new JList(listModel);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
-        list.setVisibleRowCount(5);
+        list.setBackground(background);
+        list.setForeground(foreground);
+        //list.setVisibleRowCount(5);
         JScrollPane scrollPane = new JScrollPane(list);
         add(scrollPane);
 	}

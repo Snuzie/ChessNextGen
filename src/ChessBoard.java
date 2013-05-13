@@ -64,8 +64,8 @@ public class ChessBoard implements Serializable {
 
 		makeMenuBar(frame);
 		piecesLog = new PiecesLog();
-		logWhite = new Log();
-		logBlack = new Log();
+		logWhite = new Log(Color.white, Color.black);
+		logBlack = new Log(Color.black, Color.white);
 
 		squares = new Square[8][8];
 		takenPieces = new ArrayList<Piece>();
