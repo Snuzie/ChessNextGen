@@ -468,6 +468,22 @@ public class ChessBoard implements Serializable {
 		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
+			
+			to.setPiece(from.removePiece());
+			if (kingW.isChecked(this) && !lastMoveWhite) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid move. King is checked.");
+				from.setPiece(to.removePiece());
+				to.setPiece(taken);
+				return;
+			}
+			if (kingB.isChecked(this) && lastMoveWhite) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid move. King is checked.");
+				from.setPiece(to.removePiece());
+				to.setPiece(taken);
+				return;
+			}
 			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
 			/*
