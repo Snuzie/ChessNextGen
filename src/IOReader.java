@@ -14,17 +14,18 @@ public class IOReader {
 	private Square[][] squares;
 	private JPanel board;
 	private boolean lastMoveWhite;
-	private Log log;
+	private Log whiteLog;
+	private Log blackLog;
 	private ArrayList<Piece> takenPieces;
 	private static JFileChooser fileChooser = new JFileChooser(
 			System.getProperty("user.dir"));
 
-	public IOReader(JPanel board, Square[][] squares, boolean lastMoveWhite,
-			Log log, ArrayList<Piece> takenPieces) {
-		this.board = board;
+	public IOReader(Square[][] squares, boolean lastMoveWhite,
+			Log whiteLog, Log blackLog, ArrayList<Piece> takenPieces) {
 		this.squares = squares;
 		this.lastMoveWhite = lastMoveWhite;
-		this.log = log;
+		this.whiteLog = whiteLog;
+		this.blackLog = blackLog;
 		this.takenPieces = takenPieces;
 //		File file = new File("savedgame.ser");
 	}
@@ -53,10 +54,10 @@ public class IOReader {
 		try {
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			oos.writeObject(board);
 			oos.writeObject(squares);
 			oos.writeObject(lastMoveWhite);
-			oos.writeObject(log);
+			oos.writeObject(whiteLog);
+			oos.writeObject(blackLog);
 			oos.writeObject(takenPieces);
 			oos.close();
 			fos.close();
@@ -74,9 +75,9 @@ public class IOReader {
 		try {
 			FileInputStream fis = new FileInputStream(f);
 			ObjectInputStream ois = new ObjectInputStream(fis);
-			arg[0] = (JPanel) ois.readObject();
-			arg[1] = (Square[][]) ois.readObject();
-			arg[2] = (Boolean) ois.readObject();
+			arg[0] = (Square[][]) ois.readObject();
+			arg[1] = (Boolean) ois.readObject();
+			arg[2] = (Log) ois.readObject();
 			arg[3] = (Log) ois.readObject();
 			arg[4] = (ArrayList<Piece>) ois.readObject();
 			ois.close();

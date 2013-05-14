@@ -37,7 +37,7 @@ public class ChessBoard implements Serializable {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
-		ioReader = new IOReader(board, squares, lastMoveWhite, logWhite,
+		ioReader = new IOReader(squares, lastMoveWhite, logWhite, logBlack,
 				takenPieces);
 	}
 
@@ -57,7 +57,7 @@ public class ChessBoard implements Serializable {
 	}
 
 	private void makeBoard() {
-		frame = new JFrame("Chess Leet!");
+		frame = new JFrame("Leet Chess");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Program exits when window closes
 		frame.setResizable(false);
@@ -106,12 +106,17 @@ public class ChessBoard implements Serializable {
 				squares[row][col] = enruta;
 			}
 		}
+<<<<<<< HEAD
 		
 		turnLabel = new JLabel("White turn");
+=======
+
+		turnLabel = new JLabel("White's turn");
+>>>>>>> spara och ladda me två loggar
 		turnLabel.setForeground(Color.black);
 		turnPanel.add(turnLabel);
 		turnPanel.setBackground(Color.white);
-		
+
 		// Create the "give up"-button
 		JButton giveUp = new JButton("Give up");
 		giveUp.addActionListener(new ActionListener() {
@@ -143,7 +148,7 @@ public class ChessBoard implements Serializable {
 
 		misc.add(turnPanel);
 		misc.add(giveUp);
-		
+
 		contentPane.add(misc);
 		contentPane.add(piecesLog);
 		contentPane.add(board);
@@ -187,11 +192,9 @@ public class ChessBoard implements Serializable {
 		openItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object[] arg = ioReader.getBoard();
-				// ChessBoard.this.board = (JPanel) arg[0];
-				// ChessBoard.this.squares = (Square[][]) arg[1];
-				fillBoard((Square[][]) arg[1], (Boolean) arg[2], (Log) arg[3],
-						(ArrayList<Piece>) arg[4]);
-				System.out.println("LOADED!");
+
+				fillBoard((Square[][]) arg[0], (Boolean) arg[1], (Log) arg[2],
+						(Log) arg[3], (ArrayList<Piece>) arg[4]);
 			}
 		});
 		fileMenu.add(openItem);
@@ -204,8 +207,6 @@ public class ChessBoard implements Serializable {
 					ioReader.saveBoard();
 				} catch (Exception ex) {
 				}
-
-				System.out.println("Saved!");
 			}
 		});
 		fileMenu.add(saveItem);
@@ -300,8 +301,8 @@ public class ChessBoard implements Serializable {
 		helpMenu.add(aboutItem);
 	}
 
-	private void fillBoard(Square[][] squares, boolean lastMoveWhite, Log log,
-			ArrayList<Piece> takenPieces) {
+	private void fillBoard(Square[][] squares, boolean lastMoveWhite,
+			Log whiteLog, Log blackLog, ArrayList<Piece> takenPieces) {
 		Container contentPane = frame.getContentPane();
 		try {
 			this.piecesLog.clear();
@@ -310,10 +311,12 @@ public class ChessBoard implements Serializable {
 			contentPane.remove(this.piecesLog);
 			contentPane.remove(this.board);
 			contentPane.remove(this.logWhite);
+			contentPane.remove(this.logBlack);
 			markedSquare = null;
 
 			this.takenPieces = takenPieces;
-			this.logWhite = log;
+			this.logWhite = whiteLog;
+			this.logBlack = blackLog;
 			this.lastMoveWhite = lastMoveWhite;
 
 			BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
@@ -366,10 +369,21 @@ public class ChessBoard implements Serializable {
 			}
 			contentPane.add(this.piecesLog);
 			contentPane.add(board);
-			contentPane.add(log);
+			contentPane.add(whiteLog);
+			contentPane.add(blackLog);
 
 			frame.pack();
 			frame.setVisible(true);
+			
+			if (lastMoveWhite) {
+				turnLabel.setForeground(Color.white);
+				turnLabel.setText("Black's turn");
+				turnPanel.setBackground(Color.black);
+			} else {
+				turnLabel.setForeground(Color.black);
+				turnLabel.setText("White's turn");
+				turnPanel.setBackground(Color.white);
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
