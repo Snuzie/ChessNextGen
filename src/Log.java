@@ -12,43 +12,49 @@ public class Log extends JPanel {
 	private JList list;
 	private DefaultListModel listModel;
 	private int moveCount = 1;
-	private static String letters[] = new String[]
-			{"A","B","C","D","E","F","G","H"};
-	
+	private static String letters[] = new String[] { "A", "B", "C", "D", "E",
+			"F", "G", "H" };
+
 	public Log(Color background, Color foreground) {
 		super(new BorderLayout());
 		super.setPreferredSize(new Dimension(200, 200));
-        listModel = new DefaultListModel();
-        list = new JList(listModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setLayoutOrientation(JList.VERTICAL);
-        list.setBackground(background);
-        list.setForeground(foreground);
-        //list.setVisibleRowCount(5);
-        JScrollPane scrollPane = new JScrollPane(list);
-        add(scrollPane);
+		listModel = new DefaultListModel();
+		list = new JList(listModel);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setLayoutOrientation(JList.VERTICAL);
+		list.setBackground(background);
+		list.setForeground(foreground);
+		// list.setVisibleRowCount(5);
+		JScrollPane scrollPane = new JScrollPane(list);
+		add(scrollPane);
 	}
-	
+
 	public void addMove(Square from, Square to) {
-		//rows=letters, Cols=numbers
+		// rows=letters, Cols=numbers
 		String s1 = "" + letters[from.getPos().getRow()]
-				+ (from.getPos().getColumn()+1);
+				+ (from.getPos().getColumn() + 1);
 		String s2 = "" + letters[to.getPos().getRow()]
-				+ (to.getPos().getColumn()+1);
+				+ (to.getPos().getColumn() + 1);
 		listModel.addElement(moveCount + ". " + s1 + "->" + s2);
 		list.ensureIndexIsVisible(moveCount - 1);
 		moveCount++;
 	}
 
-	public void check() {
-		listModel.set(listModel.getSize()-1, listModel.elementAt(listModel.getSize()-1)+"Check");
+	public void removeLastMove() {
+		listModel.remove(moveCount-2);
+		moveCount--;
 	}
-	
+
+	public void check() {
+		listModel.set(listModel.getSize() - 1,
+				listModel.elementAt(listModel.getSize() - 1) + "Check");
+	}
+
 	public void gameOver() {
 		listModel.addElement("Game Over!");
 	}
-	
-	public void clearLog(){
+
+	public void clearLog() {
 		listModel.clear();
 		moveCount = 1;
 	}

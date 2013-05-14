@@ -107,7 +107,7 @@ public class ChessBoard implements Serializable {
 			}
 		}
 		
-		turnLabel = new JLabel("White's turn");
+		turnLabel = new JLabel("White turn");
 		turnLabel.setForeground(Color.black);
 		turnPanel.add(turnLabel);
 		turnPanel.setBackground(Color.white);
@@ -435,7 +435,6 @@ public class ChessBoard implements Serializable {
 	 * @param to
 	 */
 	private void move(Square from, Square to) {
-
 		// Check if move is castling.
 		if (King.class.isInstance(from.getPiece())) {
 			// Short castling
@@ -443,11 +442,19 @@ public class ChessBoard implements Serializable {
 				move(squares[7][from.getPos().getColumn()], squares[5][from
 						.getPos().getColumn()]);
 				lastMoveWhite = !lastMoveWhite;
+				if (lastMoveWhite)
+					logBlack.removeLastMove();
+				else
+					logWhite.removeLastMove();
 				// Long castling
 			} else if (to.getPos().getRow() - from.getPos().getRow() == -2) {
 				move(squares[0][from.getPos().getColumn()], squares[3][from
 						.getPos().getColumn()]);
 				lastMoveWhite = !lastMoveWhite;
+				if (lastMoveWhite)
+					logBlack.removeLastMove();
+				else
+					logWhite.removeLastMove();
 			}
 		}
 		if (to.isBlocked()) {
@@ -511,12 +518,12 @@ public class ChessBoard implements Serializable {
 		if (lastMoveWhite) {
 			logWhite.addMove(from, to);
 			turnLabel.setForeground(Color.white);
-			turnLabel.setText("Black's turn");
+			turnLabel.setText("Black turn");
 			turnPanel.setBackground(Color.black);
 		} else {
 			logBlack.addMove(from, to);
 			turnLabel.setForeground(Color.black);
-			turnLabel.setText("White's turn");
+			turnLabel.setText("White turn");
 			turnPanel.setBackground(Color.white);
 		}
 	}
@@ -530,6 +537,9 @@ public class ChessBoard implements Serializable {
 		logBlack.clearLog();
 		piecesLog.clear();
 		lastMoveWhite = false;
+		turnLabel.setForeground(Color.black);
+		turnLabel.setText("White turn");
+		turnPanel.setBackground(Color.white);
 		for (int i = 0; i < 8; i++) {
 			squares[i][1].setPiece(new Pawn(i, 1, true));
 			squares[i][6].setPiece(new Pawn(i, 6, false));
