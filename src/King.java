@@ -34,7 +34,7 @@ public class King extends Piece {
 		checkMove(board.getSquare(x - 1, y - 1));
 		checkMove(board.getSquare(x + 1, y - 1));
 		checkMove(board.getSquare(x - 1, y + 1));
-		if (!(numMoves > 0) && !isChecked(board)) {
+		if (!(numMoves > 0)) {
 			if (!board.getSquare(x + 1, y).isBlocked()
 					&& !board.getSquare(x + 2, y).isBlocked()
 					&& board.getSquare(x + 3, y).isBlocked()
