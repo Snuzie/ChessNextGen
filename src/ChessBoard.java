@@ -468,6 +468,7 @@ public class ChessBoard implements Serializable {
 		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
+			to.setPiece(from.removePiece());
 			if (kingW.isChecked(this) && !lastMoveWhite) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid move. King is checked.");
@@ -536,6 +537,7 @@ public class ChessBoard implements Serializable {
 		logBlack.clearLog();
 		piecesLog.clear();
 		lastMoveWhite = false;
+		unmarkSquare();
 		turnLabel.setForeground(Color.black);
 		turnLabel.setText("White turn");
 		turnPanel.setBackground(Color.white);
