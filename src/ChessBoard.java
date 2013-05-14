@@ -468,8 +468,6 @@ public class ChessBoard implements Serializable {
 		}
 		if (to.isBlocked()) {
 			Piece taken = to.removePiece();
-			
-			to.setPiece(from.removePiece());
 			if (kingW.isChecked(this) && !lastMoveWhite) {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Invalid move. King is checked.");
@@ -486,30 +484,6 @@ public class ChessBoard implements Serializable {
 			}
 			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
-			/*
-			 * if (King.class.isInstance(taken)) { log.addMove(from, to);
-			 * log.gameOver();
-			 * 
-			 * Object[] options = { "New Game", "Quit" };
-			 * 
-			 * int n = JOptionPane.showOptionDialog(new JFrame(),
-			 * "Would you like to start a new game?", "New game?",
-			 * JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, //
-			 * do not use a // custom Icon options, // the titles of buttons
-			 * options[0]); // default button title if (n == 0) { newGame();
-			 * unmarkSquare(); return; } else { System.exit(0); } return; }/*
-			 * Försök till att fixa buggen som gör att pjäsen blir tagen när man
-			 * tar en pjäs men då blir i schack trots att ens drag återställs
-			 * och det är ens tur igen. if (kingW.isChecked(this) &&
-			 * !lastMoveWhite){ JOptionPane.showMessageDialog(new JFrame(),
-			 * "Invalid move. King is checked.");
-			 * piecesLog.removeTakenPiece(taken); takenPieces.remove(taken);
-			 * return; } if (kingB.isChecked(this) && lastMoveWhite){
-			 * JOptionPane.showMessageDialog(new JFrame(),
-			 * "Invalid move. King is checked.");
-			 * piecesLog.removeTakenPiece(taken); takenPieces.remove(taken);
-			 * return; }
-			 */
 		}
 
 		to.setPiece(from.removePiece());

@@ -17,7 +17,7 @@ public class Log extends JPanel {
 
 	public Log(Color background, Color foreground) {
 		super(new BorderLayout());
-		super.setPreferredSize(new Dimension(200, 200));
+		super.setPreferredSize(new Dimension(80, 200));
 		listModel = new DefaultListModel();
 		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
