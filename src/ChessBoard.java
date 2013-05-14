@@ -185,6 +185,7 @@ public class ChessBoard implements Serializable {
 		// Adds option under file where you can load a saved game.
 		JMenuItem openItem = new JMenuItem("Load Game");
 		openItem.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				Object[] arg = ioReader.getBoard();
 				if (arg != null) {
@@ -613,15 +614,5 @@ public class ChessBoard implements Serializable {
 	protected ArrayList<Piece> getTakenPieces() {
 		return takenPieces;
 	}
-
-	// /**
-	// * Unmark a given square.
-	// */
-	// private void unmarkSquare(Square s) throws NullPointerException {
-	// if (s == null) {
-	// throw new NullPointerException();
-	// }
-	// s.unmark();
-	// }
 
 }

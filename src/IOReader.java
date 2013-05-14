@@ -7,10 +7,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
+
 
 public class IOReader {
-	private File file;
 	private Square[][] squares;
 	private ChessBoard board;
 	private Boolean lastMoveWhite;
@@ -22,11 +21,7 @@ public class IOReader {
 
 	public IOReader(ChessBoard board) {
 		this.board = board;
-//		squares = board.getSquares();
-//		lastMoveWhite = board.getLastMoveWhite();
-//		whiteLog = getWhiteLog();
-//		blackLog = getBlackLog;
-//		takenPieces = getTakenPieces;
+
 	}
 
 	public Object[] getBoard() {
@@ -74,6 +69,7 @@ public class IOReader {
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Object[] loadFile(File f) {
 		Object[] arg = new Object[5];
 		try {

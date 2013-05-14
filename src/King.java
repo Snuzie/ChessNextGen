@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.util.HashSet;
 
 public class King extends Piece {
