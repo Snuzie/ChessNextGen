@@ -106,13 +106,8 @@ public class ChessBoard implements Serializable {
 				squares[row][col] = enruta;
 			}
 		}
-<<<<<<< HEAD
 		
 		turnLabel = new JLabel("White turn");
-=======
-
-		turnLabel = new JLabel("White's turn");
->>>>>>> spara och ladda me två loggar
 		turnLabel.setForeground(Color.black);
 		turnPanel.add(turnLabel);
 		turnPanel.setBackground(Color.white);
@@ -319,7 +314,7 @@ public class ChessBoard implements Serializable {
 			this.logBlack = blackLog;
 			this.lastMoveWhite = lastMoveWhite;
 
-			BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
+//			BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
 			GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
 
 			// contentPane.setLayout(layout);
