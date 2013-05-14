@@ -62,8 +62,6 @@ public class IOReader {
 			oos.close();
 			fos.close();
 		} catch (IOException ex) {
-			System.out.println(ex.getMessage() + "\n");
-			ex.printStackTrace();
 			return false;
 		}
 		
