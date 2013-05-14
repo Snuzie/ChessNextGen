@@ -24,7 +24,7 @@ public class ChessBoard implements Serializable {
 	private Square[][] squares; // En matris med alla rutor på brädet
 	private JPanel board;
 	private Square markedSquare;
-	private boolean lastMoveWhite = false;
+	private Boolean lastMoveWhite;
 	private Log logWhite;
 	private Log logBlack;
 	private PiecesLog piecesLog;
@@ -37,8 +37,7 @@ public class ChessBoard implements Serializable {
 	public ChessBoard() {
 		makeBoard();
 		newGame();
-		ioReader = new IOReader(squares, lastMoveWhite, logWhite, logBlack,
-				takenPieces);
+		ioReader = new IOReader(this);
 	}
 
 	public Square getMarkedSquare() {
@@ -63,6 +62,7 @@ public class ChessBoard implements Serializable {
 		frame.setResizable(false);
 
 		makeMenuBar(frame);
+		lastMoveWhite = false;
 		piecesLog = new PiecesLog();
 		logWhite = new Log(Color.white, Color.black);
 		logBlack = new Log(Color.black, Color.white);
@@ -106,7 +106,7 @@ public class ChessBoard implements Serializable {
 				squares[row][col] = enruta;
 			}
 		}
-		
+
 		turnLabel = new JLabel("White turn");
 		turnLabel.setForeground(Color.black);
 		turnPanel.add(turnLabel);
@@ -187,9 +187,11 @@ public class ChessBoard implements Serializable {
 		openItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Object[] arg = ioReader.getBoard();
-
-				fillBoard((Square[][]) arg[0], (Boolean) arg[1], (Log) arg[2],
-						(Log) arg[3], (ArrayList<Piece>) arg[4]);
+				if (arg != null) {
+					fillBoard((Square[][]) arg[0], (Boolean) arg[1],
+							(Log) arg[2], (Log) arg[3],
+							(ArrayList<Piece>) arg[4]);
+				}
 			}
 		});
 		fileMenu.add(openItem);
@@ -296,7 +298,7 @@ public class ChessBoard implements Serializable {
 		helpMenu.add(aboutItem);
 	}
 
-	private void fillBoard(Square[][] squares, boolean lastMoveWhite,
+	private void fillBoard(Square[][] squares, Boolean lastMoveWhite,
 			Log whiteLog, Log blackLog, ArrayList<Piece> takenPieces) {
 		Container contentPane = frame.getContentPane();
 		try {
@@ -314,7 +316,8 @@ public class ChessBoard implements Serializable {
 			this.logBlack = blackLog;
 			this.lastMoveWhite = lastMoveWhite;
 
-//			BoxLayout layout = new BoxLayout(contentPane, BoxLayout.LINE_AXIS);
+			// BoxLayout layout = new BoxLayout(contentPane,
+			// BoxLayout.LINE_AXIS);
 			GridLayout boardLayout = new GridLayout(9, 9, 0, 0);
 
 			// contentPane.setLayout(layout);
@@ -369,14 +372,14 @@ public class ChessBoard implements Serializable {
 
 			frame.pack();
 			frame.setVisible(true);
-			
+
 			if (lastMoveWhite) {
 				turnLabel.setForeground(Color.white);
-				turnLabel.setText("Black's turn");
+				turnLabel.setText("Black turn");
 				turnPanel.setBackground(Color.black);
 			} else {
 				turnLabel.setForeground(Color.black);
-				turnLabel.setText("White's turn");
+				turnLabel.setText("White turn");
 				turnPanel.setBackground(Color.white);
 			}
 		} catch (Exception e) {
@@ -485,9 +488,9 @@ public class ChessBoard implements Serializable {
 			}
 			piecesLog.addTakenPiece(taken);
 			takenPieces.add(taken);
+		} else {
+			to.setPiece(from.removePiece());
 		}
-
-		to.setPiece(from.removePiece());
 		if (kingW.isChecked(this) && !lastMoveWhite) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Invalid move. King is checked.");
@@ -593,6 +596,22 @@ public class ChessBoard implements Serializable {
 		}
 		markedSquare.unmark();
 		markedSquare = null;
+	}
+	
+	protected boolean getLastMoveWhite() {
+		return lastMoveWhite;
+	}
+	
+	protected Log getWhiteLog() {
+		return logWhite;
+	}
+	
+	protected Log getBlackLog() {
+		return logBlack;
+	}
+	
+	protected ArrayList<Piece> getTakenPieces() {
+		return takenPieces;
 	}
 
 	// /**

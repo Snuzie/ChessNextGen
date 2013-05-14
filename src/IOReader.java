@@ -12,22 +12,21 @@ import javax.swing.JPanel;
 public class IOReader {
 	private File file;
 	private Square[][] squares;
-	private JPanel board;
-	private boolean lastMoveWhite;
+	private ChessBoard board;
+	private Boolean lastMoveWhite;
 	private Log whiteLog;
 	private Log blackLog;
 	private ArrayList<Piece> takenPieces;
 	private static JFileChooser fileChooser = new JFileChooser(
 			System.getProperty("user.dir"));
 
-	public IOReader(Square[][] squares, boolean lastMoveWhite,
-			Log whiteLog, Log blackLog, ArrayList<Piece> takenPieces) {
-		this.squares = squares;
-		this.lastMoveWhite = lastMoveWhite;
-		this.whiteLog = whiteLog;
-		this.blackLog = blackLog;
-		this.takenPieces = takenPieces;
-//		File file = new File("savedgame.ser");
+	public IOReader(ChessBoard board) {
+		this.board = board;
+//		squares = board.getSquares();
+//		lastMoveWhite = board.getLastMoveWhite();
+//		whiteLog = getWhiteLog();
+//		blackLog = getBlackLog;
+//		takenPieces = getTakenPieces;
 	}
 
 	public Object[] getBoard() {
@@ -52,9 +51,16 @@ public class IOReader {
 
 	public boolean store(File f) {
 		try {
+			squares = board.getSquares();
+			lastMoveWhite = board.getLastMoveWhite();
+			whiteLog = board.getWhiteLog();
+			blackLog = board.getBlackLog();
+			takenPieces = board.getTakenPieces();
+			
 			FileOutputStream fos = new FileOutputStream(f);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(squares);
+//			System.out.println(lastMoveWhite);
 			oos.writeObject(lastMoveWhite);
 			oos.writeObject(whiteLog);
 			oos.writeObject(blackLog);
